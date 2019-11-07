@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+
+import java.lang.reflect.Type;
 import java.security.MessageDigest;
 
 
@@ -26,6 +28,9 @@ public class MyView extends View {
     private float mRadius;
     private RectF mArcBounds = new RectF();
 
+    private int mNumberOfDots;
+
+
     private String TAG = "hieuvh";
     public MyView(Context context) {
         super(context);
@@ -33,8 +38,20 @@ public class MyView extends View {
 
     public MyView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        Log.d(TAG, "constructor");
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MyView, 0,0);
+
+        mNumberOfDots = typedArray.getInt(R.styleable.MyView_numberOfDots, 0);
         initPaints();
+    }
+
+    public int getmNumberOfDots() {
+        return mNumberOfDots;
+    }
+
+    public void setmNumberOfDots(int mNumberOfDots) {
+        this.mNumberOfDots = mNumberOfDots;
+        invalidate();
+        requestLayout();
     }
 
     private void initPaints() {
@@ -51,17 +68,22 @@ public class MyView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawCircle(mCenterX, mCenterY, mRadius, mCircle);
-        // draw eyes
-        float eyeRadius = mRadius / 5f;
-        float eyeOffsetX = mRadius / 3f;
-        float eyeOffsetY = mRadius / 3f;
-        canvas.drawCircle(mCenterX - eyeOffsetX, mCenterY - eyeOffsetY, eyeRadius, mEyeAndMouth);
-        canvas.drawCircle(mCenterX + eyeOffsetX, mCenterY - eyeOffsetY, eyeRadius, mEyeAndMouth);
-        // draw mouth
-        float mouthInset = mRadius /3f;
-        mArcBounds.set(mouthInset, mouthInset, mRadius * 2 - mouthInset, mRadius * 2 - mouthInset);
-        canvas.drawArc(mArcBounds, 45f, 90f, false, mEyeAndMouth);
+        for (int i=0;i<getmNumberOfDots();i++){
+            canvas.drawCircle(mCenterX, mCenterY, mRadius, mCircle);
+            mCenterX++;
+            mCenterY++;
+        }
+
+//        // draw eyes
+//        float eyeRadius = mRadius / 5f;
+//        float eyeOffsetX = mRadius / 3f;
+//        float eyeOffsetY = mRadius / 3f;
+//        canvas.drawCircle(mCenterX - eyeOffsetX, mCenterY - eyeOffsetY, eyeRadius, mEyeAndMouth);
+//        canvas.drawCircle(mCenterX + eyeOffsetX, mCenterY - eyeOffsetY, eyeRadius, mEyeAndMouth);
+//        // draw mouth
+//        float mouthInset = mRadius /3f;
+//        mArcBounds.set(mouthInset, mouthInset, mRadius * 2 - mouthInset, mRadius * 2 - mouthInset);
+//        canvas.drawArc(mArcBounds, 45f, 90f, false, mEyeAndMouth);
         Log.d(TAG, "onDraw");
     }
 

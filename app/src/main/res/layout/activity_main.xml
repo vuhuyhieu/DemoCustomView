@@ -9,6 +9,7 @@
 
     <com.example.democustomview.MyView
         android:layout_width="100dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:numberOfDots="5"/>
 
 </LinearLayout>
